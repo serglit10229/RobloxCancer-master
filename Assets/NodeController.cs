@@ -8,6 +8,7 @@ public class NodeController : MonoBehaviour {
     public bool selected = false;
     public GameObject Unit;
     public List<GameObject> Targets;
+    public List<GameObject> OriginalTargets;
     public int score = 10;
     public Text textObject;
     public float interval = 1;
@@ -15,6 +16,8 @@ public class NodeController : MonoBehaviour {
     public bool hasFactory = false;
     public bool hasReactor = false;
     public bool hasFort = false;
+    public bool hasTurret = false;
+
 
     public GameObject UI;
     public float time = 0;
@@ -45,6 +48,7 @@ public class NodeController : MonoBehaviour {
         UI = gameObject.transform.GetChild(0).GetChild(1).gameObject;
         UI.GetComponent<UIManager>().node = gameObject;
         scoreUI = Object.FindObjectOfType<TeamScore>();
+        OriginalTargets = Targets;
         if (team1 == true)
         {
             team = "team1";
@@ -82,7 +86,22 @@ public class NodeController : MonoBehaviour {
             Idle = false;
         }
         */
-        
+
+
+
+        foreach (GameObject g in Targets)
+        {
+            if (g.GetComponent<NodeController>().team == team)
+            {
+                foreach (GameObject t in g.GetComponent<NodeController>().Targets)
+                {
+                    if (!Targets.Contains(t))
+                    {
+                        Targets.Add(t);
+                    }
+                }
+            }
+        }
         if (selected == true)
         {
             Renderer rend = GetComponent<Renderer>();
